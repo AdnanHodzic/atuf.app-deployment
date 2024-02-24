@@ -1,0 +1,62 @@
+# Cloud Build CI/D configuration file for automated Cloud Run builds & deployments
+#
+# Process explained in detail as part of following blog post:
+# App architecture with reliability in mind: From Kubernetes to Serverless with GCP Cloud Build & Cloud Run
+# https://foolcontrol.org/?p=4621
+# 
+# Youtube video:
+
+
+# Build logs only go to Cloud Logging
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps: 
+  # Display set env variables
+  - name: 'ubuntu'
+    args: ['bash', '-c', 'echo PROJECT=$PROJECT_ID LOCATION=$LOCATION']
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '$LOCATION-docker.pkg.dev/$PROJECT_ID/atuf/atuf:$SHORT_SHA', '.']
+  # Authenticate with GCP Artifacts Registry & fix for denied permission: artifactregistry.repositories.uploadArtifacts
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args: ["gcloud", "auth", "configure-docker", "$LOCATION-docker.pkg.dev"]
+  # Push the container image to GCP Artifacts Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '$LOCATION-docker.pkg.dev/$PROJECT_ID/atuf/atuf:$SHORT_SHA']
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+    - 'run'
+    - 'deploy'
+    - 'atuf' 
+    - '--image'
+    - '$LOCATION-docker.pkg.dev/$PROJECT_ID/atuf/atuf:$SHORT_SHA'
+    - '--region'
+    - '$LOCATION'
+    - '--memory'
+    - '128Mi'
+    - '--cpu'
+    - '1'
+    - '--min-instances'
+    - '0'
+    - '--max-instances'
+    - '5'
+    - '--service-account'
+    - 'cloud-sa@$PROJECT_ID.iam.gserviceaccount.com'
+    # - '--allow-unauthenticated' - won't work, next step must be used instead
+  # Allow public (unauthenticated) access (--allow-unauthenticated)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+    - 'run'
+    - 'services'
+    - 'add-iam-policy-binding'
+    - '--region'
+    - '$LOCATION'
+    - '--member'
+    - 'allUsers'
+    - '--role'
+    - 'roles/run.invoker'
+    - 'atuf'
