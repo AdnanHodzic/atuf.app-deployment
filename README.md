@@ -11,8 +11,8 @@ Deployment components:
   * imports.tf
   * scripts/wait_for_cloud_run.sh 
 
-Process explained in detail as part of "[App architecture with reliability in mind: From Kubernetes to Serverless with GCP Cloud Build & Cloud Run](https://foolcontrol.org/?p=4621 "App architecture with reliability in mind: From Kubernetes to Serverless with GCP Cloud Build & Cloud Run")" blog post and: 
+Process explained in detail as part of "[App architecture with reliability in mind: From Kubernetes to Serverless with GCP Cloud Build & Cloud Run](https://foolcontrol.org/?p=4621 "App architecture with reliability in mind: From Kubernetes to Serverless with GCP Cloud Build & Cloud Run")" blog post and:
 
-ToDo: embed_youtube_link_here
- 
-Youtube video.
+[![](http://foolcontrol.org/wp-content/uploads/2024/02/cloud-run-video-1.jpg)](https://www.youtube.com/watch?v=ksz1Vfg3ZQI)
+
+[Youtube: From Kubernetes to Serverless with GCP Cloud Build & Cloud Run](https://www.youtube.com/watch?v=ksz1Vfg3ZQI) Youtube video.
