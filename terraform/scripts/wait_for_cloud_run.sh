@@ -6,7 +6,7 @@
 # https://foolcontrol.org/?p=4621
 #
 # Youtube video:
-# 
+# https://youtu.be/ksz1Vfg3ZQI?si=TIDL_p7sYS7oExPv
 
 # Function to check Cloud Run service URL status
 check_cloud_run_status() {

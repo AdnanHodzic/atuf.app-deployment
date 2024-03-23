@@ -4,8 +4,8 @@
 # App architecture with reliability in mind: From Kubernetes to Serverless with GCP Cloud Build & Cloud Run
 # https://foolcontrol.org/?p=4621
 # 
-# Youtube video:
-# 
+# Youtube video: 
+# https://youtu.be/ksz1Vfg3ZQI?si=TIDL_p7sYS7oExPv
 
 # Providers setup
 terraform {
